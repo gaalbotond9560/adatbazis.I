@@ -1,0 +1,53 @@
+π cim, ar (
+    σ mufaj='Horror' (konyv)
+)
+
+π cim, nev (
+    konyv ⨝ konyv.szerzo=szerzo.szkod szerzo
+)
+
+π cim (
+    (σ nemzetiseg='brit' (szerzo))
+    ⨝ szerzo.szkod=konyv.szerzo
+    konyv
+)
+
+γ count(kkod)->db (
+    σ mufaj='Fantasy' (konyv)
+)
+
+π cim, ar (
+    konyv ⨝ ar=minAr (
+        γ min(ar)->minAr (konyv)
+    )
+)
+
+konyv ⨝ ar=maxAr (
+    γ max(ar) → maxAr (konyv)
+)
+
+π cim, nev (
+    (σ ar>2000 (konyv))
+    ⨝ konyv.szerzo=szerzo.szkod
+    szerzo
+)
+
+γ mufaj; avg(ar) → atlagAr (
+    konyv
+)
+
+γ nev; sum(ar) → osszAr (
+    szerzo ⨝ szerzo.szkod=konyv.szerzo konyv
+)
+
+π cim (
+    σ ar>atlagAr (
+    konyv ⨯(
+	γ avg(ar) → atlagAr (konyv)
+	)
+    )
+)
+
+γ nev; count(kkod) → darab (
+    szerzo ⨝ szerzo.szkod=konyv.szerzo konyv
+)
